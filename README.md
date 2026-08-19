@@ -1,6 +1,10 @@
 # Fishing-OneKey
 
+<img src="art/icon.png" alt="Fishing-OneKey Icon" width="64" height="64" align="left" />
+
 Minimal-Addon für World of Warcraft (Midnight, Interface 120007): Angeln werfen und Fang einholen auf einer einzigen Taste – ganz ohne die vielen Zusatzfunktionen größerer Fishing-Addons wie Angleur.
+
+<br clear="left"/>
 
 ## Funktionsweise
 
