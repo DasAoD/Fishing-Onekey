@@ -18,6 +18,7 @@ Es wird an keiner Stelle eine geschützte Funktion (`InteractUnit`) direkt aus u
 
 ## Installation
 
+0. Alternativ zu Schritt 1: fertiges `.zip` von der [Releases-Seite](https://git.uliana.de/DasAoD/Fishing-Onekey/releases) entpacken statt das Repo zu klonen.
 1. Ordner `fishing-onekey` nach `World of Warcraft/_retail_/Interface/AddOns/` kopieren.
 2. Im Spiel `/fok bind` eingeben und die gewünschte Taste drücken.
 3. Optional: **"Automatisches Beute nehmen"** (Optionen → Spiel/Interface → Beute) aktivieren, damit der Fang direkt ohne weiteren Klick ins Inventar wandert.

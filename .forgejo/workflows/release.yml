@@ -1,0 +1,45 @@
+name: Release
+
+# Bei jedem Tag-Push im Format "v1.2.3" wird ein .zip mit den AddOn-Dateien
+# gebaut und als Anhang an ein neues Forgejo-Release gehaengt.
+#
+# Neues Release erstellen:
+#   1. ## Version in Fishing-Onekey.toc anpassen, committen.
+#   2. git tag v1.0.1 && git push origin v1.0.1
+#
+# Passe "runs-on" unten an das Label deines Runners an, falls er nicht
+# unter "docker" laeuft (Forgejo-Standard-Label des offiziellen Runners).
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: docker
+    steps:
+      - name: Checkout
+        uses: https://code.forgejo.org/actions/checkout@v4
+
+      - name: AddOn-Ordner packen
+        run: |
+          mkdir -p build/Fishing-Onekey out
+          cp Fishing-OneKey.lua Fishing-Onekey.toc Icon.tga README.md build/Fishing-Onekey/
+          cd build
+          zip -r "../out/Fishing-Onekey-${GITHUB_REF_NAME}.zip" Fishing-Onekey
+
+      - name: Release erstellen
+        uses: https://code.forgejo.org/actions/forgejo-release@v2
+        with:
+          direction: upload
+          url: ${{ github.server_url }}
+          repo: ${{ github.repository }}
+          release-dir: out
+          release-notes: "Automatisches Release ${{ github.ref_name }}"
+          # Falls das Erstellen mit einem Rechte-Fehler fehlschlaegt: unter
+          # Repo-Settings -> Actions -> General "Read and write permissions"
+          # aktivieren, oder ein Personal Access Token (Scope: write:repository)
+          # als Repo-Secret "RELEASE_TOKEN" anlegen und hier stattdessen
+          # ${{ secrets.RELEASE_TOKEN }} eintragen.
+          token: ${{ secrets.GITHUB_TOKEN }}
