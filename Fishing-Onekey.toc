@@ -3,7 +3,7 @@
 ## Notes: Cast and reel in fishing with a single key.
 ## Notes-deDE: Angeln werfen und Fang einholen auf einer einzigen Taste.
 ## Author: DasAoD
-## Version: 1.0.0
+## Version: 1.1.0
 ## IconTexture: Interface\AddOns\Fishing-Onekey\Icon.tga
 ## SavedVariables: FishingOneKeyDB
 
