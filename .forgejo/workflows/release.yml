@@ -7,8 +7,8 @@ name: Release
 #   1. ## Version in Fishing-Onekey.toc anpassen, committen.
 #   2. git tag v1.0.1 && git push origin v1.0.1
 #
-# Passe "runs-on" unten an das Label deines Runners an, falls er nicht
-# unter "docker" laeuft (Forgejo-Standard-Label des offiziellen Runners).
+# Laeuft auf dem Linux-Runner "vpn-runner" (Label "ubuntu-latest"). Passe
+# "runs-on" an, falls sich das Label deines Runners mal aendert.
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 
 jobs:
   release:
-    runs-on: docker
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@v4
