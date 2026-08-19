@@ -10,6 +10,8 @@
 
 Minimal-Addon für World of Warcraft (Midnight, Interface 120007): Angeln werfen und Fang einholen auf einer einzigen Taste – ganz ohne die vielen Zusatzfunktionen größerer Fishing-Addons wie Angleur.
 
+**Kein UI, keine Buttons für Köder/Buffs, kein Buff-Tracking.** Nur die eine Taste. Wer einen umfangreicheren "Fishing Helper" mit Drag&Drop-Slots für Köder/Buff-Food sucht, ist hier falsch – dafür gibt's andere, featurereichere Addons.
+
 <br clear="left"/>
 
 ## Funktionsweise

@@ -10,6 +10,8 @@
 
 Minimal World of Warcraft addon (Midnight, Interface 120007): cast your fishing line and reel in the catch with a single key — none of the extra features bigger fishing addons like Angleur come with.
 
+**No UI, no gear-management buttons, no buff tracking.** Just the one hotkey. If you're after a fuller "fishing helper" with drag-and-drop lure/buff slots, this isn't that addon — there are other, more feature-rich options for that.
+
 <br clear="left"/>
 
 ## How it works
