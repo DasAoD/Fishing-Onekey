@@ -1,0 +1,6 @@
+package-as: Fishing-Onekey
+ignore:
+  - art
+  - .forgejo
+  - README.md
+  - README.en.md
