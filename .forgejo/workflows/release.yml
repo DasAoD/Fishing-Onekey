@@ -1,13 +1,20 @@
 name: Release
 
 # Bei jedem Tag-Push im Format "v1.2.3" wird ein .zip mit den AddOn-Dateien
-# gebaut und per Forgejo-API direkt als Release-Anhang hochgeladen (bewusst
-# ohne Drittanbieter-Action wie forgejo-release@v2 -- die brach auf diesem
-# Runner mit einem Node-Runtime-Kompatibilitaetsfehler ab).
+# gebaut und sowohl als Forgejo- als auch als GitHub-Release veroeffentlicht
+# (per API direkt, bewusst ohne Drittanbieter-Actions wie forgejo-release@v2
+# -- die brach auf diesem Runner mit einem Node-Runtime-Kompatibilitaetsfehler
+# ab). Die Release-Notes werden automatisch aus den Commit-Messages seit dem
+# vorherigen Tag zusammengestellt.
 #
 # Neues Release erstellen:
 #   1. ## Version in Fishing-Onekey.toc anpassen, committen.
 #   2. git tag v1.0.1 && git push origin v1.0.1
+#
+# Benoetigte Repo-Secrets (Settings -> Actions -> Secrets):
+#   GH_RELEASE_TOKEN  GitHub Personal Access Token (Scope: public_repo reicht
+#                     bei einem oeffentlichen Repo) fuer das GitHub-Release.
+#                     Kann derselbe Token wie fuer den Push-Mirror sein.
 #
 # Laeuft auf dem Linux-Runner "vpn-runner" (Label "ubuntu-latest").
 
@@ -22,6 +29,26 @@ jobs:
     steps:
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Changelog erzeugen
+        id: changelog
+        run: |
+          set -eu
+          PREV_TAG=$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || true)
+          {
+            echo "notes<<CHANGELOG_EOF"
+            if [ -n "$PREV_TAG" ]; then
+              echo "Aenderungen seit $PREV_TAG:"
+              echo
+              git log "$PREV_TAG..$GITHUB_REF_NAME" --pretty=format:"- %s"
+            else
+              echo "Erstes Release."
+            fi
+            echo
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: AddOn-Ordner packen
         run: |
@@ -30,7 +57,7 @@ jobs:
           cd build
           zip -r "../out/Fishing-Onekey-${GITHUB_REF_NAME}.zip" Fishing-Onekey
 
-      - name: Release erstellen und Zip hochladen
+      - name: Forgejo-Release erstellen und Zip hochladen
         env:
           # Falls das mit einem 401/403 fehlschlaegt: unter Repo-Settings ->
           # Actions -> General "Read and write permissions" aktivieren, oder
@@ -39,26 +66,30 @@ jobs:
           # secrets.RELEASE_TOKEN eintragen.
           FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API: ${{ github.server_url }}/api/v1/repos/${{ github.repository }}
+          NOTES: ${{ steps.changelog.outputs.notes }}
         run: |
           set -eu
 
-          echo "Erstelle Release fuer Tag $GITHUB_REF_NAME ..."
+          BODY_JSON=$(jq -n --arg tag "$GITHUB_REF_NAME" --arg notes "$NOTES" \
+            '{tag_name: $tag, name: $tag, body: $notes}')
+
+          echo "Erstelle Forgejo-Release fuer Tag $GITHUB_REF_NAME ..."
           response=$(curl -s -w "\n%{http_code}" -X POST "$API/releases" \
             -H "Authorization: token $FORGEJO_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"tag_name\":\"${GITHUB_REF_NAME}\",\"name\":\"${GITHUB_REF_NAME}\",\"body\":\"Automatisches Release ${GITHUB_REF_NAME}\"}")
+            -d "$BODY_JSON")
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | sed '$d')
           echo "HTTP $http_code: $body"
           if [ "$http_code" != "201" ]; then
-            echo "Release-Erstellung fehlgeschlagen."
+            echo "Forgejo-Release-Erstellung fehlgeschlagen."
             exit 1
           fi
 
-          release_id=$(echo "$body" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
-          echo "Release-ID: $release_id"
+          release_id=$(echo "$body" | jq -r .id)
+          echo "Forgejo-Release-ID: $release_id"
 
-          echo "Lade Zip hoch ..."
+          echo "Lade Zip zu Forgejo hoch ..."
           upload=$(curl -s -w "\n%{http_code}" -X POST \
             "$API/releases/$release_id/assets?name=Fishing-Onekey-${GITHUB_REF_NAME}.zip" \
             -H "Authorization: token $FORGEJO_TOKEN" \
@@ -66,6 +97,46 @@ jobs:
           upload_code=$(echo "$upload" | tail -n1)
           echo "HTTP $upload_code"
           if [ "$upload_code" != "201" ]; then
-            echo "Upload fehlgeschlagen."
+            echo "Forgejo-Upload fehlgeschlagen."
+            exit 1
+          fi
+
+      - name: GitHub-Release erstellen und Zip hochladen
+        env:
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          NOTES: ${{ steps.changelog.outputs.notes }}
+        run: |
+          set -eu
+          REPO="DasAoD/Fishing-Onekey"
+
+          BODY_JSON=$(jq -n --arg tag "$GITHUB_REF_NAME" --arg notes "$NOTES" \
+            '{tag_name: $tag, name: $tag, body: $notes}')
+
+          echo "Erstelle GitHub-Release fuer Tag $GITHUB_REF_NAME ..."
+          response=$(curl -s -w "\n%{http_code}" -X POST "https://api.github.com/repos/$REPO/releases" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -d "$BODY_JSON")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          echo "HTTP $http_code: $body"
+          if [ "$http_code" != "201" ]; then
+            echo "GitHub-Release-Erstellung fehlgeschlagen."
+            exit 1
+          fi
+
+          release_id=$(echo "$body" | jq -r .id)
+          echo "GitHub-Release-ID: $release_id"
+
+          echo "Lade Zip zu GitHub hoch ..."
+          upload=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://uploads.github.com/repos/$REPO/releases/$release_id/assets?name=Fishing-Onekey-${GITHUB_REF_NAME}.zip" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@out/Fishing-Onekey-${GITHUB_REF_NAME}.zip")
+          upload_code=$(echo "$upload" | tail -n1)
+          echo "HTTP $upload_code"
+          if [ "$upload_code" != "201" ]; then
+            echo "GitHub-Upload fehlgeschlagen."
             exit 1
           fi
