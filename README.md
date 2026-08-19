@@ -1,5 +1,9 @@
 # Fishing-OneKey
 
+> **📌 Mirror-Hinweis:** Dieses Repository ist ein automatischer Spiegel.
+> Die primäre Entwicklung findet auf **[git.uliana.de/DasAoD/Fishing-Onekey](https://git.uliana.de/DasAoD/Fishing-Onekey)** statt.
+> Issues und Pull Requests bitte dort öffnen.
+
 *[English version](README.en.md)*
 
 <img src="art/icon.png" alt="Fishing-OneKey Icon" width="64" height="64" align="left" />
