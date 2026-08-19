@@ -32,6 +32,28 @@ local FISHING_SPELL_ID = 131474
 local CAST_BUTTON_NAME = "FishingOneKeyCastButton"
 local CHAT_PREFIX = "|cff33ff99Fishing-OneKey|r: "
 
+-- Lokalisierung der Chat-Ausgaben. enUS ist der Fallback fuer alle Clients
+-- ohne eigenen Eintrag, deDE wird explizit ueberschrieben.
+local L = {
+    BIND_PROMPT = "Press the desired key now (ESC to cancel)...",
+    BIND_CANCELLED = "Cancelled, previous assignment kept.",
+    BIND_SET = "Key '%s' assigned.",
+    COMBAT_LOCKDOWN = "Not possible in combat.",
+    UNBOUND = "Key assignment removed.",
+    STATUS = "/fok bind - assign a key | /fok unbind - remove assignment. Current: %s",
+    STATUS_NONE = "none",
+}
+
+if GetLocale() == "deDE" then
+    L.BIND_PROMPT = "Druecke jetzt die gewuenschte Taste (ESC zum Abbrechen)..."
+    L.BIND_CANCELLED = "Abgebrochen, alte Zuordnung bleibt bestehen."
+    L.BIND_SET = "Taste '%s' zugewiesen."
+    L.COMBAT_LOCKDOWN = "Geht nicht im Kampf."
+    L.UNBOUND = "Tastenzuordnung entfernt."
+    L.STATUS = "/fok bind - Taste zuweisen | /fok unbind - Zuordnung entfernen. Aktuell: %s"
+    L.STATUS_NONE = "keine"
+end
+
 -- Secure Button, der per Tastendruck "geklickt" wird und Angeln castet.
 local castButton = CreateFrame("Button", CAST_BUTTON_NAME, UIParent, "SecureActionButtonTemplate")
 castButton:Hide()
@@ -119,7 +141,7 @@ captureFrame:SetScript("OnKeyDown", function(self, key)
     self:Hide()
 
     if key == "ESCAPE" then
-        print(CHAT_PREFIX .. "Abgebrochen, alte Zuordnung bleibt bestehen.")
+        print(CHAT_PREFIX .. L.BIND_CANCELLED)
         return
     end
 
@@ -136,7 +158,7 @@ captureFrame:SetScript("OnKeyDown", function(self, key)
     ClearKeyBinding()
     FishingOneKeyDB.key = key
     ApplyKeyBinding()
-    print(CHAT_PREFIX .. "Taste '" .. key .. "' zugewiesen.")
+    print(CHAT_PREFIX .. L.BIND_SET:format(key))
 end)
 
 local function NormalizeCmd(msg)
@@ -151,18 +173,18 @@ SlashCmdList["FISHINGONEKEY"] = function(msg)
 
     if cmd == "bind" then
         if InCombatLockdown() then
-            print(CHAT_PREFIX .. "Geht nicht im Kampf.")
+            print(CHAT_PREFIX .. L.COMBAT_LOCKDOWN)
             return
         end
-        print(CHAT_PREFIX .. "Druecke jetzt die gewuenschte Taste (ESC zum Abbrechen)...")
+        print(CHAT_PREFIX .. L.BIND_PROMPT)
         captureFrame:Show()
     elseif cmd == "unbind" then
         ClearKeyBinding()
         FishingOneKeyDB.key = nil
-        print(CHAT_PREFIX .. "Tastenzuordnung entfernt.")
+        print(CHAT_PREFIX .. L.UNBOUND)
     else
         local key = FishingOneKeyDB.key
-        print(CHAT_PREFIX .. "/fok bind - Taste zuweisen | /fok unbind - Zuordnung entfernen. Aktuell: " .. (key or "keine"))
+        print(CHAT_PREFIX .. L.STATUS:format(key or L.STATUS_NONE))
     end
 end
 
