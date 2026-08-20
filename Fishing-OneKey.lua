@@ -44,7 +44,9 @@ local L = {
     STATUS_NONE = "none",
 }
 
-if GetLocale() == "deDE" then
+local locale = GetLocale()
+
+if locale == "deDE" then
     L.BIND_PROMPT = "Druecke jetzt die gewuenschte Taste (ESC zum Abbrechen)..."
     L.BIND_CANCELLED = "Abgebrochen, alte Zuordnung bleibt bestehen."
     L.BIND_SET = "Taste '%s' zugewiesen."
@@ -52,6 +54,70 @@ if GetLocale() == "deDE" then
     L.UNBOUND = "Tastenzuordnung entfernt."
     L.STATUS = "/fok bind - Taste zuweisen | /fok unbind - Zuordnung entfernen. Aktuell: %s"
     L.STATUS_NONE = "keine"
+elseif locale == "frFR" then
+    L.BIND_PROMPT = "Appuie maintenant sur la touche souhaitee (ESC pour annuler)..."
+    L.BIND_CANCELLED = "Annule, l'attribution precedente est conservee."
+    L.BIND_SET = "Touche '%s' attribuee."
+    L.COMBAT_LOCKDOWN = "Impossible en combat."
+    L.UNBOUND = "Attribution de touche supprimee."
+    L.STATUS = "/fok bind - attribuer une touche | /fok unbind - supprimer l'attribution. Actuelle : %s"
+    L.STATUS_NONE = "aucune"
+elseif locale == "esES" or locale == "esMX" then
+    L.BIND_PROMPT = "Pulsa ahora la tecla deseada (ESC para cancelar)..."
+    L.BIND_CANCELLED = "Cancelado, se mantiene la asignacion anterior."
+    L.BIND_SET = "Tecla '%s' asignada."
+    L.COMBAT_LOCKDOWN = "No es posible en combate."
+    L.UNBOUND = "Asignacion de tecla eliminada."
+    L.STATUS = "/fok bind - asignar una tecla | /fok unbind - eliminar la asignacion. Actual: %s"
+    L.STATUS_NONE = "ninguna"
+elseif locale == "ptBR" then
+    L.BIND_PROMPT = "Pressione agora a tecla desejada (ESC para cancelar)..."
+    L.BIND_CANCELLED = "Cancelado, a atribuicao anterior foi mantida."
+    L.BIND_SET = "Tecla '%s' atribuida."
+    L.COMBAT_LOCKDOWN = "Nao e possivel em combate."
+    L.UNBOUND = "Atribuicao de tecla removida."
+    L.STATUS = "/fok bind - atribuir uma tecla | /fok unbind - remover atribuicao. Atual: %s"
+    L.STATUS_NONE = "nenhuma"
+elseif locale == "itIT" then
+    L.BIND_PROMPT = "Premi ora il tasto desiderato (ESC per annullare)..."
+    L.BIND_CANCELLED = "Annullato, l'assegnazione precedente e stata mantenuta."
+    L.BIND_SET = "Tasto '%s' assegnato."
+    L.COMBAT_LOCKDOWN = "Non possibile in combattimento."
+    L.UNBOUND = "Assegnazione del tasto rimossa."
+    L.STATUS = "/fok bind - assegna un tasto | /fok unbind - rimuovi l'assegnazione. Attuale: %s"
+    L.STATUS_NONE = "nessuno"
+elseif locale == "ruRU" then
+    L.BIND_PROMPT = "Нажми нужную клавишу (ESC для отмены)..."
+    L.BIND_CANCELLED = "Отменено, прежняя привязка сохранена."
+    L.BIND_SET = "Клавиша '%s' назначена."
+    L.COMBAT_LOCKDOWN = "Невозможно в бою."
+    L.UNBOUND = "Привязка клавиши удалена."
+    L.STATUS = "/fok bind - назначить клавишу | /fok unbind - удалить привязку. Текущая: %s"
+    L.STATUS_NONE = "нет"
+elseif locale == "koKR" then
+    L.BIND_PROMPT = "원하는 키를 지금 누르세요 (ESC로 취소)..."
+    L.BIND_CANCELLED = "취소됨, 이전 설정이 유지됩니다."
+    L.BIND_SET = "'%s' 키가 지정되었습니다."
+    L.COMBAT_LOCKDOWN = "전투 중에는 불가능합니다."
+    L.UNBOUND = "키 지정이 제거되었습니다."
+    L.STATUS = "/fok bind - 키 지정 | /fok unbind - 지정 제거. 현재: %s"
+    L.STATUS_NONE = "없음"
+elseif locale == "zhCN" then
+    L.BIND_PROMPT = "请按下想要绑定的按键（按ESC取消）..."
+    L.BIND_CANCELLED = "已取消，保留之前的绑定。"
+    L.BIND_SET = "已绑定按键 '%s'。"
+    L.COMBAT_LOCKDOWN = "战斗中无法执行。"
+    L.UNBOUND = "已移除按键绑定。"
+    L.STATUS = "/fok bind - 绑定按键 | /fok unbind - 移除绑定。当前：%s"
+    L.STATUS_NONE = "无"
+elseif locale == "zhTW" then
+    L.BIND_PROMPT = "請按下想要綁定的按鍵（按ESC取消）..."
+    L.BIND_CANCELLED = "已取消，保留之前的綁定。"
+    L.BIND_SET = "已綁定按鍵 '%s'。"
+    L.COMBAT_LOCKDOWN = "戰鬥中無法執行。"
+    L.UNBOUND = "已移除按鍵綁定。"
+    L.STATUS = "/fok bind - 綁定按鍵 | /fok unbind - 移除綁定。目前：%s"
+    L.STATUS_NONE = "無"
 end
 
 -- Secure Button, der per Tastendruck "geklickt" wird und Angeln castet.
