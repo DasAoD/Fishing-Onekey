@@ -1,4 +1,4 @@
-## Interface: 120007, 120100, 120105
+## Interface: 120007, 120100, 120105, 16001
 ## Title: Fishing-OneKey
 ## Notes: Cast and reel in fishing with a single key.
 ## Notes-deDE: Angeln werfen und Fang einholen auf einer einzigen Taste.
