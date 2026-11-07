@@ -28,7 +28,9 @@ local ADDON_NAME = ...
 
 FishingOneKeyDB = FishingOneKeyDB or {}
 
-local FISHING_SPELL_ID = 131474
+-- Mainline kennt 131474, WoW Forever nur die klassische ID 7620.
+local FISHING_SPELL_IDS = { 131474, 7620 }
+local fishingSpellName
 local CAST_BUTTON_NAME = "FishingOneKeyCastButton"
 local CHAT_PREFIX = "|cff33ff99Fishing-OneKey|r: "
 
@@ -42,6 +44,7 @@ local L = {
     UNBOUND = "Key assignment removed.",
     STATUS = "/fok bind - assign a key | /fok unbind - remove assignment. Current: %s",
     STATUS_NONE = "none",
+    NO_FISHING_SPELL = "Fishing spell not found, the key will not work.",
 }
 
 local locale = GetLocale()
@@ -54,6 +57,7 @@ if locale == "deDE" then
     L.UNBOUND = "Tastenzuordnung entfernt."
     L.STATUS = "/fok bind - Taste zuweisen | /fok unbind - Zuordnung entfernen. Aktuell: %s"
     L.STATUS_NONE = "keine"
+    L.NO_FISHING_SPELL = "Angeln-Zauber nicht gefunden, die Taste funktioniert nicht."
 elseif locale == "frFR" then
     L.BIND_PROMPT = "Appuie maintenant sur la touche souhaitee (ESC pour annuler)..."
     L.BIND_CANCELLED = "Annule, l'attribution precedente est conservee."
@@ -125,19 +129,23 @@ local castButton = CreateFrame("Button", CAST_BUTTON_NAME, UIParent, "SecureActi
 castButton:Hide()
 castButton:RegisterForClicks("AnyUp", "AnyDown")
 castButton:SetAttribute("type", "spell")
--- Ueber die Spell-ID statt des Namens ansprechen, damit das auch auf
--- nicht-englischen Clients (z. B. Deutsch: "Angeln") zuverlaessig castet.
-castButton:SetAttribute("spell", FISHING_SPELL_ID)
 
 local overrideFrame = CreateFrame("Frame", "FishingOneKeyOverrideFrame")
 
--- Ermittelt den lokalisierten Namen von "Angeln", unabhaengig davon,
--- welche Spell-API-Variante der Client gerade bereitstellt.
-local function GetFishingSpellName()
-    if C_Spell and C_Spell.GetSpellName then
-        return C_Spell.GetSpellName(FISHING_SPELL_ID)
+-- Der lokalisierte Name statt der ID waehlt beim Cast automatisch den
+-- hoechsten bekannten Rang und funktioniert in jeder Client-Sprache.
+local function ResolveFishingSpellName()
+    for _, id in ipairs(FISHING_SPELL_IDS) do
+        local name
+        if C_Spell and C_Spell.GetSpellName then
+            name = C_Spell.GetSpellName(id)
+        else
+            name = GetSpellInfo(id)
+        end
+        if name then
+            return name
+        end
     end
-    return GetSpellInfo(FISHING_SPELL_ID)
 end
 
 local function IsFishingChannel()
@@ -145,7 +153,7 @@ local function IsFishingChannel()
     if not channelName then
         return false
     end
-    return channelName == GetFishingSpellName()
+    return channelName == fishingSpellName
 end
 
 local function ActivateInteractOverride()
@@ -261,6 +269,12 @@ overrideFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
 
 overrideFrame:SetScript("OnEvent", function(self, event, unit)
     if event == "PLAYER_LOGIN" then
+        fishingSpellName = ResolveFishingSpellName()
+        if fishingSpellName then
+            castButton:SetAttribute("spell", fishingSpellName)
+        else
+            print(CHAT_PREFIX .. L.NO_FISHING_SPELL)
+        end
         -- Sicherstellen, dass beim Login keine Override-Bindung haengen bleibt,
         -- und die gespeicherte Taste erneut auf den Cast-Button legen.
         DeactivateInteractOverride()
