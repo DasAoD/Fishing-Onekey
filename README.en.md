@@ -8,7 +8,7 @@
 
 <img src="art/icon.png" alt="Fishing-OneKey Icon" width="64" height="64" align="left" />
 
-Minimal World of Warcraft addon (Midnight): cast your fishing line and reel in the catch with a single key — none of the extra features bigger fishing addons like Angleur come with.
+Minimal World of Warcraft addon (Midnight and WoW Forever): cast your fishing line and reel in the catch with a single key — none of the extra features bigger fishing addons like Angleur come with.
 
 **No UI, no gear-management buttons, no buff tracking.** Just the one hotkey. If you're after a fuller "fishing helper" with drag-and-drop lure/buff slots, this isn't that addon — there are other, more feature-rich options for that.
 
@@ -27,7 +27,7 @@ No protected function (`InteractUnit`) is ever called directly from insecure cod
 ## Installation
 
 0. Alternative to step 1: download the ready-made `.zip` from the [Releases page](https://git.uliana.de/DasAoD/Fishing-Onekey/releases) instead of cloning the repo.
-1. Copy the `fishing-onekey` folder to `World of Warcraft/_retail_/Interface/AddOns/`.
+1. Copy the `fishing-onekey` folder to `World of Warcraft/_retail_/Interface/AddOns/` (WoW Forever: `_forever_`).
 2. In-game, type `/fok bind` and press the desired key.
 3. Optional: enable **"Auto Loot"** (Options → Gameplay/Interface → Loot) so your catch goes straight into your bags without an extra click.
 
