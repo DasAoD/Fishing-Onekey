@@ -21,8 +21,9 @@ No UI, no gear-management buttons, no buff tracking. Just the one hotkey. If you
    - WoW Forever: `World of Warcraft/_forever_/Interface/AddOns/`
 
    The ready-made `.zip` is on the [Releases page](https://git.uliana.de/DasAoD/Fishing-Onekey/releases).
-2. In game, type `/fok bind` and press the key you want (ESC cancels). The key is saved and survives `/reload` and relogging.
-3. Stand at the water and press your key to cast. Press it again when a fish bites to reel it in.
+2. In the game options, turn on **Enable Interact Key**. Reeling in does not work without it.
+3. In game, type `/fok bind` and press the key you want (ESC cancels). The key is saved and survives `/reload` and relogging.
+4. Stand at the water and press your key to cast. Press it again when a fish bites to reel it in.
 
 Tip: enable **Auto Loot** (Options → Gameplay/Interface → Loot) so your catch goes straight into your bags.
 
@@ -50,6 +51,7 @@ These are Blizzard's own messages. The addon cannot check beforehand whether a c
 
 - **"Must have a Fishing Pole equipped":** equip a fishing pole. The addon does not equip one for you.
 - **"Your cast didn't land in fishable water":** face the water and move closer, then press the key again.
+- **The line is cast but the catch is not reeled in:** turn on **Enable Interact Key** in the game options.
 
 ## Limitations
 

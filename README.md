@@ -21,8 +21,9 @@ Kein UI, keine Buttons für Köder oder Ausrüstung, kein Buff-Tracking. Nur die
    - WoW Forever: `World of Warcraft/_forever_/Interface/AddOns/`
 
    Das fertige `.zip` gibt es auf der [Releases-Seite](https://git.uliana.de/DasAoD/Fishing-Onekey/releases).
-2. Im Spiel `/fok bind` eingeben und die gewünschte Taste drücken (ESC bricht ab). Die Taste wird gespeichert und übersteht Reload und Login.
-3. Ans Wasser stellen und die Taste drücken, um die Angel auszuwerfen. Beißt ein Fisch, die Taste nochmal drücken, um ihn einzuholen.
+2. In den Spieloptionen die Option **"Enable Interact Key"** (englischer Client) einschalten, also die Interaktionstaste. Ohne sie funktioniert das Einholen nicht.
+3. Im Spiel `/fok bind` eingeben und die gewünschte Taste drücken (ESC bricht ab). Die Taste wird gespeichert und übersteht Reload und Login.
+4. Ans Wasser stellen und die Taste drücken, um die Angel auszuwerfen. Beißt ein Fisch, die Taste nochmal drücken, um ihn einzuholen.
 
 Tipp: **"Automatisches Beute nehmen"** (Optionen → Spiel/Interface → Beute) aktivieren, dann wandert der Fang direkt ins Inventar.
 
@@ -50,6 +51,7 @@ Das sind Blizzards eigene Meldungen. Das Addon kann vorher nicht prüfen, ob ein
 
 - **"Angel muss angelegt sein."**: eine Angel anlegen. Das Addon legt keine für dich an.
 - **"Eure Angelschnur ist nicht in einem Fischgewässer gelandet."**: zum Wasser drehen, näher herangehen und die Taste erneut drücken.
+- **Die Angel wird ausgeworfen, der Fang aber nicht eingeholt:** in den Spieloptionen die Interaktionstaste aktivieren.
 
 ## Einschränkungen
 
