@@ -12,7 +12,7 @@
 ## Notes-zhCN: 只需一个按键即可抛竿和收线钓鱼。
 ## Notes-zhTW: 只需一個按鍵即可拋竿和收線釣魚。
 ## Author: DasAoD
-## Version: 1.2.0
+## Version: 1.2.1
 ## IconTexture: Interface\AddOns\Fishing-Onekey\Icon.tga
 ## SavedVariables: FishingOneKeyDB
 
