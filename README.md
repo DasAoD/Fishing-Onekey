@@ -48,8 +48,8 @@ Es wird keine geschützte Funktion aus unsicherem Code aufgerufen, und es ist ke
 
 Das sind Blizzards eigene Meldungen. Das Addon kann vorher nicht prüfen, ob ein Wurf klappt.
 
-- **"Must have a Fishing Pole equipped"** (englischer Client): eine Angel anlegen. Das Addon legt keine für dich an.
-- **"Your cast didn't land in fishable water"** (englischer Client): zum Wasser drehen, näher herangehen und die Taste erneut drücken.
+- **"Angel muss angelegt sein."**: eine Angel anlegen. Das Addon legt keine für dich an.
+- **"Eure Angelschnur ist nicht in einem Fischgewässer gelandet."**: zum Wasser drehen, näher herangehen und die Taste erneut drücken.
 
 ## Einschränkungen
 
