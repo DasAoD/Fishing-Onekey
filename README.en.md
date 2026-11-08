@@ -8,39 +8,53 @@
 
 <img src="art/icon.png" alt="Fishing-OneKey Icon" width="64" height="64" align="left" />
 
-Minimal World of Warcraft addon (Midnight and WoW Forever): cast your fishing line and reel in the catch with a single key — none of the extra features bigger fishing addons like Angleur come with.
+Cast your line and reel in the catch with **one single key**. For Midnight and WoW Forever.
 
-**No UI, no gear-management buttons, no buff tracking.** Just the one hotkey. If you're after a fuller "fishing helper" with drag-and-drop lure/buff slots, this isn't that addon — there are other, more feature-rich options for that.
+No UI, no gear-management buttons, no buff tracking. Just the one hotkey. If you want a fuller "fishing helper" with lure and buff slots, this isn't that addon, and there are more feature-rich options for that.
 
 <br clear="left"/>
 
-## How it works
+## Quick start
 
-1. You assign a key via chat command: `/fok bind`, then press the desired key (ESC cancels). The assignment is saved and survives `/reload` and login.
-   (Blizzard's classic `Bindings.xml` mechanism for addon keybindings is no longer supported by current clients — `<Binding>` is rejected as an unknown XML element. Hence the chat-command approach instead of the Key Bindings options list.)
-2. Press the key outside of a fishing channel and it "clicks" an invisible secure button that casts `Fishing` and casts your line — the same technique regular action bar buttons use to cast spells.
-3. As soon as the fishing channel starts (`UNIT_SPELLCAST_CHANNEL_START`), the addon remaps that same physical key to Blizzard's built-in `INTERACTTARGET` binding action via `SetOverrideBinding` — exactly the action behind the regular interact key in the game options.
-4. Once the channel ends (fish caught, cancelled, or timed out), the remap is removed. The key casts your line again on the next press.
+1. Extract the folder into your AddOns directory:
+   - Retail: `World of Warcraft/_retail_/Interface/AddOns/`
+   - WoW Forever: `World of Warcraft/_forever_/Interface/AddOns/`
 
-No protected function (`InteractUnit`) is ever called directly from insecure code. Casting runs through a regular `SecureActionButton` (just like an action bar button), and the remap during the channel goes through `SetOverrideBinding` onto an existing, Blizzard-provided binding action — both officially documented techniques used by many established addons.
+   The ready-made `.zip` is on the [Releases page](https://git.uliana.de/DasAoD/Fishing-Onekey/releases).
+2. In game, type `/fok bind` and press the key you want (ESC cancels). The key is saved and survives `/reload` and relogging.
+3. Stand at the water and press your key to cast. Press it again when a fish bites to reel it in.
 
-## Installation
-
-0. Alternative to step 1: download the ready-made `.zip` from the [Releases page](https://git.uliana.de/DasAoD/Fishing-Onekey/releases) instead of cloning the repo.
-1. Copy the `fishing-onekey` folder to `World of Warcraft/_retail_/Interface/AddOns/` (WoW Forever: `_forever_`).
-2. In-game, type `/fok bind` and press the desired key.
-3. Optional: enable **"Auto Loot"** (Options → Gameplay/Interface → Loot) so your catch goes straight into your bags without an extra click.
+Tip: enable **Auto Loot** (Options → Gameplay/Interface → Loot) so your catch goes straight into your bags.
 
 ## Chat commands
 
-- `/fok bind` – assign the next key you press (ESC cancels)
-- `/fok unbind` – remove the assignment
-- `/fok` – show the currently assigned key
+| Command | What it does |
+| --- | --- |
+| `/fok bind` | Assign the next key you press (ESC cancels) |
+| `/fok unbind` | Remove the assignment |
+| `/fok` | Show the currently assigned key |
+
+Chat messages are localized for all client languages (enUS, deDE, frFR, esES/esMX, ptBR, itIT, ruRU, koKR, zhCN, zhTW).
+
+## How it works
+
+- Outside of a fishing channel, your key presses an invisible secure button that casts Fishing, the same technique action bar buttons use.
+- While the fishing channel is active, the key is remapped to Blizzard's own interact action (`INTERACTTARGET`), the one behind the regular interact key. When the channel ends, the remap is removed again.
+- The key is set via chat command because addon keybindings through `Bindings.xml` are no longer supported by current clients.
+
+No protected function is called from insecure code, and no third-party library is needed.
+
+## Troubleshooting
+
+These are Blizzard's own messages. The addon cannot check beforehand whether a cast will work.
+
+- **"Must have a Fishing Pole equipped":** equip a fishing pole. The addon does not equip one for you.
+- **"Your cast didn't land in fishable water":** face the water and move closer, then press the key again.
 
 ## Limitations
 
-- No camera-scan bobber detection of its own (unlike Angleur). Reliability depends on Blizzard's own line-of-sight-based "soft interact" system — if the bobber lands outside your view, the key may not respond.
-- No auto-equip of fishing pole/hat, no toys, no raft handling. For anything beyond that, a full-featured fishing addon remains the better choice.
+- No bobber detection of its own (unlike Angleur). The reel-in relies on Blizzard's line-of-sight-based "soft interact" system. If the bobber lands outside your view, the key may not respond.
+- No auto-equip of pole or hat, no toys, no raft handling.
 
 ## Contributors
 

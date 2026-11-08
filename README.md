@@ -8,39 +8,53 @@
 
 <img src="art/icon.png" alt="Fishing-OneKey Icon" width="64" height="64" align="left" />
 
-Minimal-Addon für World of Warcraft (Midnight und WoW Forever): Angeln werfen und Fang einholen auf einer einzigen Taste – ganz ohne die vielen Zusatzfunktionen größerer Fishing-Addons wie Angleur.
+Angel auswerfen und Fang einholen mit **einer einzigen Taste**. Für Midnight und WoW Forever.
 
-**Kein UI, keine Buttons für Köder/Buffs, kein Buff-Tracking.** Nur die eine Taste. Wer einen umfangreicheren "Fishing Helper" mit Drag&Drop-Slots für Köder/Buff-Food sucht, ist hier falsch – dafür gibt's andere, featurereichere Addons.
+Kein UI, keine Buttons für Köder oder Ausrüstung, kein Buff-Tracking. Nur die eine Taste. Wer einen umfangreicheren "Fishing Helper" mit Slots für Köder und Buffs sucht, ist hier falsch, dafür gibt es featurereichere Addons.
 
 <br clear="left"/>
 
-## Funktionsweise
+## Schnellstart
 
-1. Du weist die gewünschte Taste per Chat-Befehl zu: `/fok bind`, dann die gewünschte Taste drücken (ESC bricht ab). Die Zuordnung wird gespeichert und übersteht Reload/Login.
-   (Blizzards klassischer `Bindings.xml`-Mechanismus für AddOn-Tastenbelegungen wird von aktuellen Clients nicht mehr unterstützt – `<Binding>` wird als unbekanntes XML-Element abgelehnt. Deshalb der Weg über einen eigenen Chat-Befehl statt der Options-Tastenbelegungsliste.)
-2. Drückst du die Taste außerhalb eines Angel-Channels, "klickt" sie einen unsichtbaren Secure-Button, der `Fishing` castet und die Angel auswirft – dieselbe Technik, mit der auch reguläre Aktionsleisten-Buttons Spells casten.
-3. Sobald der Angel-Channel startet (`UNIT_SPELLCAST_CHANNEL_START`), legt das Addon dieselbe physische Taste per `SetOverrideBinding` auf die eingebaute Blizzard-Bindungsaktion `INTERACTTARGET` um – exakt die Aktion, die auch hinter der regulären Interaktionstaste aus den Spieloptionen steckt.
-4. Endet der Channel (Fisch gefangen, abgebrochen oder Zeit abgelaufen), wird die Umlegung wieder entfernt. Die Taste wirft beim nächsten Druck erneut die Angel aus.
+1. Den Ordner ins AddOns-Verzeichnis kopieren:
+   - Retail: `World of Warcraft/_retail_/Interface/AddOns/`
+   - WoW Forever: `World of Warcraft/_forever_/Interface/AddOns/`
 
-Es wird an keiner Stelle eine geschützte Funktion (`InteractUnit`) direkt aus unsicherem Code aufgerufen. Der Angel-Cast läuft über einen regulären `SecureActionButton` (wie ein Aktionsleisten-Button), das Umlegen während des Channels über `SetOverrideBinding` auf eine bereits vorhandene, von Blizzard bereitgestellte Bindungsaktion – beides offiziell dokumentierte, in vielen etablierten Addons genutzte Techniken.
+   Das fertige `.zip` gibt es auf der [Releases-Seite](https://git.uliana.de/DasAoD/Fishing-Onekey/releases).
+2. Im Spiel `/fok bind` eingeben und die gewünschte Taste drücken (ESC bricht ab). Die Taste wird gespeichert und übersteht Reload und Login.
+3. Ans Wasser stellen und die Taste drücken, um die Angel auszuwerfen. Beißt ein Fisch, die Taste nochmal drücken, um ihn einzuholen.
 
-## Installation
-
-0. Alternativ zu Schritt 1: fertiges `.zip` von der [Releases-Seite](https://git.uliana.de/DasAoD/Fishing-Onekey/releases) entpacken statt das Repo zu klonen.
-1. Ordner `fishing-onekey` nach `World of Warcraft/_retail_/Interface/AddOns/` kopieren (WoW Forever: `_forever_`).
-2. Im Spiel `/fok bind` eingeben und die gewünschte Taste drücken.
-3. Optional: **"Automatisches Beute nehmen"** (Optionen → Spiel/Interface → Beute) aktivieren, damit der Fang direkt ohne weiteren Klick ins Inventar wandert.
+Tipp: **"Automatisches Beute nehmen"** (Optionen → Spiel/Interface → Beute) aktivieren, dann wandert der Fang direkt ins Inventar.
 
 ## Chat-Befehle
 
-- `/fok bind` – nächste gedrückte Taste zuweisen (ESC bricht ab)
-- `/fok unbind` – Zuordnung entfernen
-- `/fok` – aktuell zugewiesene Taste anzeigen
+| Befehl | Wirkung |
+| --- | --- |
+| `/fok bind` | Nächste gedrückte Taste zuweisen (ESC bricht ab) |
+| `/fok unbind` | Zuordnung entfernen |
+| `/fok` | Aktuell zugewiesene Taste anzeigen |
+
+Die Chat-Meldungen sind für alle Client-Sprachen lokalisiert (enUS, deDE, frFR, esES/esMX, ptBR, itIT, ruRU, koKR, zhCN, zhTW).
+
+## Funktionsweise
+
+- Außerhalb eines Angel-Channels drückt die Taste einen unsichtbaren Secure-Button, der Angeln castet, dieselbe Technik wie bei Aktionsleisten-Buttons.
+- Solange der Angel-Channel läuft, wird die Taste auf Blizzards eigene Interaktionsaktion (`INTERACTTARGET`) umgelegt, die auch hinter der regulären Interaktionstaste steckt. Endet der Channel, wird die Umlegung wieder entfernt.
+- Die Taste wird per Chat-Befehl gesetzt, weil AddOn-Tastenbelegungen über `Bindings.xml` von aktuellen Clients nicht mehr unterstützt werden.
+
+Es wird keine geschützte Funktion aus unsicherem Code aufgerufen, und es ist keine Fremdbibliothek nötig.
+
+## Fehlersuche
+
+Das sind Blizzards eigene Meldungen. Das Addon kann vorher nicht prüfen, ob ein Wurf klappt.
+
+- **"Must have a Fishing Pole equipped"** (englischer Client): eine Angel anlegen. Das Addon legt keine für dich an.
+- **"Your cast didn't land in fishable water"** (englischer Client): zum Wasser drehen, näher herangehen und die Taste erneut drücken.
 
 ## Einschränkungen
 
-- Es wird keine eigene Bobber-Erkennung per Kamera-Scan durchgeführt (wie bei Angleur). Die Zuverlässigkeit hängt an Blizzards eigenem "Soft Interact"-System, das sichtfeldbasiert arbeitet – landet der Schwimmer außerhalb deines Sichtfelds, reagiert die Taste ggf. nicht.
-- Kein Auto-Equip von Angelrute/-hut, keine Toys, kein Floß-Handling. Für alles darüber hinaus bleibt ein vollwertiges Fishing-Addon die bessere Wahl.
+- Keine eigene Bobber-Erkennung (anders als bei Angleur). Das Einholen hängt an Blizzards sichtfeldbasiertem "Soft Interact"-System. Landet der Schwimmer außerhalb deines Sichtfelds, reagiert die Taste ggf. nicht.
+- Kein Auto-Equip von Angelrute oder Hut, keine Toys, kein Floß-Handling.
 
 ## Mitwirkende
 
