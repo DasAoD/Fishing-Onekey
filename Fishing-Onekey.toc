@@ -2,10 +2,10 @@
 ## Title: Fishing-OneKey
 ## Notes: Cast and reel in fishing with a single key.
 ## Notes-deDE: Angeln werfen und Fang einholen auf einer einzigen Taste.
-## Notes-frFR: Lancez et remontez votre ligne de peche avec une seule touche.
-## Notes-esES: Lanza y recoge tu cana de pescar con una sola tecla.
-## Notes-esMX: Lanza y recoge tu cana de pescar con una sola tecla.
-## Notes-ptBR: Lance e recolha sua linha de pesca com uma unica tecla.
+## Notes-frFR: Lancez et remontez votre ligne de pêche avec une seule touche.
+## Notes-esES: Lanza y recoge tu caña de pescar con una sola tecla.
+## Notes-esMX: Lanza y recoge tu caña de pescar con una sola tecla.
+## Notes-ptBR: Lance e recolha sua linha de pesca com uma única tecla.
 ## Notes-itIT: Lancia e recupera la tua canna da pesca con un solo tasto.
 ## Notes-ruRU: Забрасывай и подтягивай удочку одной клавишей.
 ## Notes-koKR: 한 개의 키로 낚싯대를 던지고 감아올리세요.
